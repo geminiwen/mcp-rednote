@@ -1,0 +1,25 @@
+{
+  "name": "mcp-rednote",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "npm run build && node dist/index.js",
+    "dev": "bun run index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.7.0",
+    "express": "^5.0.1",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
+  }
+}
