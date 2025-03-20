@@ -6,18 +6,20 @@ import { transportTokenStorage } from '../misc/storage'
 export const rednotePostSchema = {
     title: z.string(),
     content: z.string(),
-    images: z.array(z.string()),
+    covers: z.array(z.string()),
+    tags: z.array(z.string())
 };
 
 type CreatePostToolFunction = (args: {
     title: string,
     content: string,
-    images: string[]
+    tags: string[],
+    covers: string[]
 }, context: { sessionId?: string }) => CallToolResult | Promise<CallToolResult>
 
 
 export const createPost: CreatePostToolFunction = async (
-    { title, content, images }, { sessionId }
+    { title, content, covers, tags }, { sessionId }
 ) => {
     if (!sessionId) {
         return {
@@ -40,28 +42,34 @@ export const createPost: CreatePostToolFunction = async (
         };
     }
 
-    const job = new Promise<string>((resolve) => {
+    const job = new Promise<Record<string, any>>((resolve) => {
         channel.send(JSON.stringify({
-            type: "createPost",
+            type: "task",
             payload: {
-                title,
-                content,
-                images
+                action: "createPost",
+                config: {
+                    title,
+                    tags,
+                    content,
+                    covers,
+                    type: "image"
+                }
             }
         }));
     
         channel.once("message", (data) => {
             const result = data.toString();
-            resolve(result);
+            resolve(JSON.parse(result));
         });
     });
 
     const result = await job;
 
+
     return {
         content: [{
             type: "text",
-            text: result
+            text: JSON.stringify(result)
         }]
     };
 };

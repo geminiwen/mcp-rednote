@@ -43,6 +43,11 @@ router.post("/messages", async (req, res) => {
     const { sessionId = "" } = req.query
     const transport = transportStorage[sessionId as string];
 
+    if (!transport) {
+        res.status(404).send("Transport Not found")
+        return;
+    }
+
     await transport.handlePostMessage(req, res);
 });
 

@@ -22,7 +22,10 @@ export const getRoutes = function(cb: Function) {
             delete registry[token];
         })
     
-        ws.send('hello');
+        ws.send(JSON.stringify({
+            type: "message",
+            payload: "Hello"
+        }));
         
     });
 
