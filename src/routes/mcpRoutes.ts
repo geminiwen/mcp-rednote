@@ -13,8 +13,8 @@ const server = new McpServer({
 });
 
 server.tool(
-    "create-post",
-    "Create an rednote app post",
+    "create_rednote_post",
+    "Create an rednote app post / 向小红书分享你的帖子",
     rednotePostSchema,
     createPost
 )
