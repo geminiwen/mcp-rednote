@@ -1,7 +1,8 @@
 import express from 'express';
-import { getForecast, weatherSchema } from '../mcps/weatherController.js';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import { rednotePostSchema, createPost } from '../mcps/rednoteTools';
+import { transportStorage, transportTokenStorage } from '../misc/storage';
 
 const router = express.Router();
 
@@ -12,23 +13,23 @@ const server = new McpServer({
 });
 
 server.tool(
-    "get-forecast",
-    "Get weather forecast for a location",
-    weatherSchema,
-    getForecast
-);
+    "create-post",
+    "Create an rednote app post",
+    rednotePostSchema,
+    createPost
+)
 
-const transportStorage: { 
-    [key:string]: SSEServerTransport 
-} = {};
 
 router.get("/sse", async (req, res) => {
     const transport = new SSEServerTransport("/mcp/messages", res);
+    const { token = "123" }  = req.query;
+
     await server.connect(transport);
 
     const { sessionId } = transport
 
     transportStorage[sessionId] = transport;
+    transportTokenStorage[sessionId] = token as string;
    
     res.once("close", () => {
         delete transportStorage[sessionId];

@@ -1,18 +1,16 @@
 import express from "express";
 import mcpRoutes from "./src/routes/mcpRoutes.js";
-import cookieSession from "cookie-session";
+import { getRoutes as getClientRoutes } from "./src/routes/clientRoutes.js";
+import expressWS from 'express-ws';
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
-// app.use(cookieSession({
-//   name: 'session',
-//   maxAge: 24 * 60 * 60 * 1000, // 24 hours
-//   keys: ['key1', 'key2']
-// }))
+const { applyTo: routerWrap} = expressWS(app);
 
 // Register routes
 app.use("/mcp", mcpRoutes);
+app.use("/client", getClientRoutes(routerWrap));
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
