@@ -7,25 +7,25 @@ export const rednotePostSchema = {
     title: z.string(),
     content: z.string(),
     covers: z.array(z.string()),
-    tags: z.array(z.string())
+    tags: z.array(z.string()).optional().describe("Tags of the post")
 };
 
 type CreatePostToolFunction = (args: {
     title: string,
     content: string,
-    tags: string[],
+    tags?: string[],
     covers: string[]
 }, context: { sessionId?: string }) => CallToolResult | Promise<CallToolResult>
 
 
 export const createPost: CreatePostToolFunction = async (
-    { title, content, covers, tags }, { sessionId }
+    { title, content, covers, tags = [] }, { sessionId }
 ) => {
     if (!sessionId) {
         return {
             content: [{
                 type: "text",
-                text: "There is no client, so publish failed"
+                text: "There is no client connected, so publish failed"
             }]
         };
     }
@@ -37,7 +37,7 @@ export const createPost: CreatePostToolFunction = async (
         return {
             content: [{
                 type: "text",
-                text: "There is no client, so publish failed"
+                text: "There is no client connected, so publish failed"
             }]
         };
     }
