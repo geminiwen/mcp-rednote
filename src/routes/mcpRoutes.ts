@@ -1,5 +1,5 @@
 import express from 'express';
-import { getForecast, weatherSchema } from '../controllers/weatherController.js';
+import { getForecast, weatherSchema } from '../mcps/weatherController.js';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 
@@ -18,17 +18,31 @@ server.tool(
     getForecast
 );
 
+const transportStorage: { 
+    [key:string]: SSEServerTransport 
+} = {};
+
 router.get("/sse", async (req, res) => {
-    const transport = new SSEServerTransport("/sse/messages", res);
+    const transport = new SSEServerTransport("/mcp/messages", res);
     await server.connect(transport);
+
+    const { sessionId } = transport
+
+    transportStorage[sessionId] = transport;
+   
+    res.once("close", () => {
+        delete transportStorage[sessionId];
+    });
+    
+    // like flush, see https://nodejs.org/api/http.html#responsewritechunk-encoding-callback
+    res.write('');
 });
 
 router.post("/messages", async (req, res) => {
-    // Note: to support multiple simultaneous connections, these messages will
-    // need to be routed to a specific matching transport. (This logic isn't
-    // implemented here, for simplicity.)
-    console.dir("??")
-    // await transport.handlePostMessage(req, res);
+    const { sessionId = "" } = req.query
+    const transport = transportStorage[sessionId as string];
+
+    await transport.handlePostMessage(req, res);
 });
 
 export default router;
