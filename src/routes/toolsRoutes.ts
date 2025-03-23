@@ -10,6 +10,7 @@ router.post("/create_rednote_post", async (req, res) => {
     const channel = registry[token];
 
     if (!channel) {
+        console.log(`No client for ${token}`)
         res.json({
             content: [{
                 type: "text",

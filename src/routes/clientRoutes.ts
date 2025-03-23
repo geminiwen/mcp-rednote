@@ -9,6 +9,7 @@ export const getRoutes = function(cb: Function) {
 
     router.ws('/', (ws, req) => {
         const { token } = req.query;
+        console.log(`${token} 登录`)
     
         if (typeof token !== 'string') {
             return;
