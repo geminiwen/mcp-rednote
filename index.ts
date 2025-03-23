@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 
 const port = 3001;
 
-const { applyTo: routerWrap} = expressWS(app);
+const { applyTo: routerWrap } = expressWS(app);
 
 // Register routes
 app.use("/mcp", mcpRoutes);

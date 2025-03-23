@@ -6,7 +6,6 @@ import { registry } from "../misc/storage"
 const router = express.Router();
 
 router.post("/create_rednote_post", async (req, res) => {
-    console.dir(req.body)
     const { title, content, tags, covers, token } = req.body;
     const channel = registry[token];
 
@@ -42,7 +41,6 @@ router.post("/create_rednote_post", async (req, res) => {
     });
 
     const result = await job;
-
 
     res.json({
         content: [{
