@@ -1,10 +1,8 @@
 import express from 'express';
-import type ws from 'ws'
+import { registry } from "../misc/storage";
 
 const router = express.Router();
-export const registry: {
-    [key: string]: ws.WebSocket; 
-} = {};
+
 
 export const getRoutes = function(cb: Function) {
     cb(router);

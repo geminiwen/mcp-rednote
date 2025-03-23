@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { registry } from "../routes/clientRoutes"
+import { registry } from "../misc/storage"
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types'
 import { transportTokenStorage } from '../misc/storage'
 

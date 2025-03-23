@@ -15,6 +15,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.7.0",
     "@types/express-serve-static-core": "^5.0.6",
+    "body-parser": "^1.20.3",
     "cookie-session": "^2.1.0",
     "express": "^5.0.1",
     "express-ws": "^5.0.2",
